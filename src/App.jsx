@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import RegistrationForm from './components/RegistrationForm';
 import AdminPanel from './components/AdminPanel';
 
+const API_URL = import.meta.env.DEV 
+  ? 'http://localhost:5000/api' 
+  : '/conamin-register/api';
+
 export default function App() {
-  // Load users from localStorage
-  const [users, setUsers] = useState(() => {
-    const saved = localStorage.getItem('sorteo_users');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [users, setUsers] = useState([]);
 
   // Load theme preference
   const [theme, setTheme] = useState(() => {
@@ -30,6 +30,23 @@ export default function App() {
     }
   }, []);
 
+  // Fetch users from API on mount
+  useEffect(() => {
+    fetch(`${API_URL}/registros`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setUsers(data);
+        }
+      })
+      .catch(err => {
+        console.error("Error al cargar registros de la API, usando localStorage como fallback:", err);
+        const saved = localStorage.getItem('sorteo_users');
+        if (saved) {
+          setUsers(JSON.parse(saved));
+        }
+      });
+  }, []);
 
   // Apply theme to document
   useEffect(() => {
@@ -37,16 +54,51 @@ export default function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // Sync users to localStorage
+  // Sync users to API backend
   const handleAddUser = (newUser) => {
-    const updatedUsers = [...users, newUser];
-    setUsers(updatedUsers);
-    localStorage.setItem('sorteo_users', JSON.stringify(updatedUsers));
+    fetch(`${API_URL}/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newUser)
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('Error al registrar');
+      }
+      return res.json();
+    })
+    .then(data => {
+      if (data.success) {
+        const updatedUsers = [...users, newUser];
+        setUsers(updatedUsers);
+        localStorage.setItem('sorteo_users', JSON.stringify(updatedUsers));
+      }
+    })
+    .catch(err => {
+      console.error("Error al guardar en el servidor, guardando en local como contingencia:", err);
+      const updatedUsers = [...users, newUser];
+      setUsers(updatedUsers);
+      localStorage.setItem('sorteo_users', JSON.stringify(updatedUsers));
+    });
   };
 
   const handleClearUsers = () => {
-    setUsers([]);
-    localStorage.removeItem('sorteo_users');
+    fetch(`${API_URL}/clear`, {
+      method: 'POST'
+    })
+    .then(res => {
+      if (res.ok) {
+        setUsers([]);
+        localStorage.removeItem('sorteo_users');
+      }
+    })
+    .catch(err => {
+      console.error("Error al borrar en el servidor, borrando en local:", err);
+      setUsers([]);
+      localStorage.removeItem('sorteo_users');
+    });
   };
 
   const toggleTheme = () => {
