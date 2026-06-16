@@ -1,0 +1,804 @@
+/* Custom fonts and core properties */
+:root {
+  --font-title: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  /* Theme Light Mode */
+  --bg-primary: #f4f6fa;
+  --bg-card: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: rgba(226, 232, 240, 0.8);
+  --border-focus: #6366f1;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-glow: rgba(79, 70, 229, 0.15);
+  --accent: #10b981;
+  --accent-glow: rgba(16, 185, 129, 0.15);
+  --danger: #ef4444;
+  --danger-glow: rgba(239, 68, 68, 0.15);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-blur: blur(16px);
+  --winner-card-bg: linear-gradient(135deg, #e0e7ff 0%, #e0f2fe 100%);
+  --winner-card-text: #1e1b4b;
+}
+
+[data-theme="dark"] {
+  /* Theme Dark Mode */
+  --bg-primary: #0b0f19;
+  --bg-card: #151f32;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(51, 65, 85, 0.6);
+  --border-focus: #818cf8;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-glow: rgba(99, 102, 241, 0.3);
+  --accent: #34d399;
+  --accent-glow: rgba(52, 211, 153, 0.3);
+  --danger: #f87171;
+  --danger-glow: rgba(248, 113, 113, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --glass-bg: rgba(21, 31, 50, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-blur: blur(20px);
+  --winner-card-bg: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+  --winner-card-text: #e0e7ff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* App Shell Layout */
+.app-container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Background Gradients */
+.bg-glow-top {
+  position: fixed;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0,0,0,0) 70%);
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.bg-glow-bottom {
+  position: fixed;
+  bottom: -10%;
+  left: 20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, rgba(0,0,0,0) 70%);
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+/* Header & Navigation */
+.app-header {
+  width: 100%;
+  max-width: 650px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  z-index: 2;
+}
+
+.app-logo {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-icon {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-icon:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-focus);
+  color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-icon:active {
+  transform: translateY(0);
+}
+
+/* Main Card Wrapper (Glassmorphism) */
+.card-wrapper {
+  width: 100%;
+  max-width: 650px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+}
+
+@media (max-width: 640px) {
+  .card-wrapper {
+    padding: 24px 16px;
+    border-radius: 16px;
+  }
+  .app-container {
+    padding: 16px 8px;
+  }
+}
+
+/* Form Styles */
+.form-title {
+  font-family: var(--font-title);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.form-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.form-group {
+  position: relative;
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  outline: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-input:focus {
+  border-color: var(--border-focus);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+.form-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+  font-size: 1rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+  padding: 0 4px;
+}
+
+/* Floated label logic */
+.form-input:focus ~ .form-label,
+.form-input:not(:placeholder-shown) ~ .form-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  background: var(--bg-card);
+  color: var(--primary);
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.form-input.has-error {
+  border-color: var(--danger);
+}
+
+.form-input.has-error:focus {
+  box-shadow: 0 0 0 4px var(--danger-glow);
+}
+
+.form-input.has-success {
+  border-color: var(--accent);
+}
+
+.form-input.has-success:focus {
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.error-message {
+  font-size: 0.8rem;
+  color: var(--danger);
+  margin-top: 6px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: slideIn 0.2s ease forwards;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px var(--primary-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--font-title);
+  margin-top: 8px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--primary-glow);
+  filter: brightness(1.1);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--text-secondary);
+  box-shadow: none;
+}
+
+/* Success View */
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.success-icon-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.success-title {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.success-desc {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.summary-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.summary-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.summary-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Admin Panels & Login */
+.admin-login-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.admin-lock-icon {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 16px;
+  animation: pulse 2s infinite;
+}
+
+.admin-login-form {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 16px;
+}
+
+.admin-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Admin Panel Layout */
+.admin-header-tabs {
+  display: flex;
+  gap: 12px;
+  border-bottom: 1.5px solid var(--border-color);
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+}
+
+.admin-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  position: relative;
+  font-family: var(--font-title);
+}
+
+.admin-tab.active {
+  color: var(--primary);
+}
+
+.admin-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -9.5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 3px 3px 0 0;
+}
+
+/* Database Tab */
+.db-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.search-input {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  outline: none;
+  font-size: 0.9rem;
+  width: 220px;
+}
+
+.search-input:focus {
+  border-color: var(--border-focus);
+}
+
+.action-buttons-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-secondary {
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-primary);
+  border-color: var(--text-secondary);
+}
+
+.btn-danger {
+  padding: 10px 16px;
+  background: var(--danger-glow);
+  border: 1px solid var(--danger);
+  border-radius: 10px;
+  color: var(--danger);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.admin-table th {
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.02);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 700;
+  color: var(--text-secondary);
+  font-family: var(--font-title);
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background: rgba(99, 102, 241, 0.03);
+}
+
+.no-records {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* Raffle Tab (Sorteo) */
+.raffle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.raffle-config {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.raffle-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+.raffle-number-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-counter {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-counter:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.raffle-count-display {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 700;
+  width: 50px;
+  text-align: center;
+}
+
+/* Raffle Shuffling & Results Screen */
+.raffle-draw-arena {
+  width: 100%;
+  background: rgba(99, 102, 241, 0.05);
+  border: 1.5px dashed var(--primary);
+  border-radius: 20px;
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  margin-top: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.shuffle-animation {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: scaleBounce 0.15s ease-in-out infinite alternate;
+}
+
+.shuffle-details {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+/* Winner Presentation */
+.winners-stage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.winner-headline {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.winners-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+}
+
+.winner-card {
+  background: var(--winner-card-bg);
+  border: 2px solid var(--accent);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+  color: var(--winner-card-text);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  animation: floatCard 4s ease-in-out infinite;
+}
+
+.winner-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--accent);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.winner-name {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.winner-detail {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleBounce {
+  from {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Confetti Overlay */
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  pointer-events: none;
+}
