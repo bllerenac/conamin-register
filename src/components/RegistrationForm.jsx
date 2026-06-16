@@ -5,6 +5,7 @@ export default function RegistrationForm({ onAddUser }) {
     nombre: '',
     dni: '',
     correo: '',
+    telefono: '',
     empresa: ''
   });
 
@@ -39,6 +40,13 @@ export default function RegistrationForm({ onAddUser }) {
           error = 'El correo electrónico es requerido';
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
           error = 'Ingrese un formato de correo electrónico válido';
+        }
+        break;
+      case 'telefono':
+        if (!value.trim()) {
+          error = 'El número de teléfono es requerido';
+        } else if (!/^\+?[0-9\s-]{7,15}$/.test(value.trim())) {
+          error = 'Ingrese un número de teléfono válido (mínimo 7 dígitos, solo números, espacios y \'-\')';
         }
         break;
       case 'empresa':
@@ -95,6 +103,7 @@ export default function RegistrationForm({ onAddUser }) {
         nombre: formData.nombre.trim(),
         dni: formData.dni.trim().toUpperCase(),
         correo: formData.correo.trim(),
+        telefono: formData.telefono.trim(),
         empresa: formData.empresa.trim(),
         fecha: new Date().toLocaleString('es-ES')
       };
@@ -108,6 +117,7 @@ export default function RegistrationForm({ onAddUser }) {
         nombre: '',
         dni: '',
         correo: '',
+        telefono: '',
         empresa: ''
       });
       setTouched({});
@@ -143,6 +153,10 @@ export default function RegistrationForm({ onAddUser }) {
           <div className="summary-item">
             <span className="summary-label">Correo:</span>
             <span className="summary-value">{submittedData.correo}</span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Teléfono:</span>
+            <span className="summary-value">{submittedData.telefono}</span>
           </div>
           <div className="summary-item">
             <span className="summary-label">Empresa:</span>
@@ -241,6 +255,31 @@ export default function RegistrationForm({ onAddUser }) {
                 <line x1="12" y1="16" x2="12.01" y2="16"></line>
               </svg>
               {errors.correo}
+            </div>
+          )}
+        </div>
+
+        <div className="form-group">
+          <input
+            id="form-telefono"
+            type="tel"
+            name="telefono"
+            className={getInputClassName('telefono')}
+            placeholder=" "
+            value={formData.telefono}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            required
+          />
+          <label htmlFor="form-telefono" className="form-label">Número de Teléfono</label>
+          {touched.telefono && errors.telefono && (
+            <div className="error-message">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              {errors.telefono}
             </div>
           )}
         </div>

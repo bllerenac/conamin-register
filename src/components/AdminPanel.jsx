@@ -67,6 +67,7 @@ export default function AdminPanel({ users, onClearUsers }) {
       user.nombre.toLowerCase().includes(term) ||
       user.dni.toLowerCase().includes(term) ||
       user.correo.toLowerCase().includes(term) ||
+      (user.telefono && user.telefono.toLowerCase().includes(term)) ||
       user.empresa.toLowerCase().includes(term)
     );
   });
@@ -225,6 +226,7 @@ export default function AdminPanel({ users, onClearUsers }) {
                     <th>Nombre y Apellidos</th>
                     <th>DNI</th>
                     <th>Correo</th>
+                    <th>Teléfono</th>
                     <th>Empresa</th>
                     <th>Fecha Registro</th>
                   </tr>
@@ -235,6 +237,7 @@ export default function AdminPanel({ users, onClearUsers }) {
                       <td style={{ fontWeight: '600' }}>{user.nombre}</td>
                       <td><code>{user.dni}</code></td>
                       <td>{user.correo}</td>
+                      <td>{user.telefono}</td>
                       <td>{user.empresa}</td>
                       <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{user.fecha}</td>
                     </tr>
@@ -318,6 +321,7 @@ export default function AdminPanel({ users, onClearUsers }) {
                         <div className="winner-name">{winner.nombre}</div>
                         <div className="winner-detail"><strong>DNI:</strong> {winner.dni}</div>
                         <div className="winner-detail"><strong>Correo:</strong> {winner.correo}</div>
+                        <div className="winner-detail"><strong>Teléfono:</strong> {winner.telefono}</div>
                         <div className="winner-detail"><strong>Empresa:</strong> {winner.empresa}</div>
                       </div>
                     ))}
