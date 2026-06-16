@@ -4,7 +4,7 @@ import AdminPanel from './components/AdminPanel';
 
 const API_URL = import.meta.env.DEV 
   ? 'http://localhost:5000/api' 
-  : '/conamin-register/api';
+  : '/api';
 
 export default function App() {
   const [users, setUsers] = useState([]);
