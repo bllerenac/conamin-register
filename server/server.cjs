@@ -75,15 +75,35 @@ const server = http.createServer((req, res) => {
         res.end(JSON.stringify({ error: 'JSON inválido' }));
       }
     });
-  } else if (req.url === '/api/clear' && req.method === 'POST') {
-    fs.writeFile(FILE_PATH, JSON.stringify([], null, 2), err => {
+  } else if (req.url.startsWith('/api/delete/') && req.method === 'DELETE') {
+    const idToDelete = req.url.split('/api/delete/')[1];
+    if (!idToDelete) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'ID no proporcionado' }));
+      return;
+    }
+    fs.readFile(FILE_PATH, 'utf8', (err, data) => {
       if (err) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Error al limpiar el archivo' }));
+        res.end(JSON.stringify({ error: 'Error al leer el archivo' }));
         return;
       }
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: true }));
+      let list = [];
+      try {
+        list = JSON.parse(data || '[]');
+      } catch (e) {
+        list = [];
+      }
+      const filteredList = list.filter(u => u.id !== idToDelete);
+      fs.writeFile(FILE_PATH, JSON.stringify(filteredList, null, 2), err => {
+        if (err) {
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Error al escribir el archivo' }));
+          return;
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true }));
+      });
     });
   } else {
     res.writeHead(404, { 'Content-Type': 'application/json' });

@@ -22,6 +22,7 @@ export default function App() {
 
   // Check if '?admin' is in URL query parameters
   const [isAdminParamPresent, setIsAdminParamPresent] = useState(false);
+  const [participantToDelete, setParticipantToDelete] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -84,20 +85,22 @@ export default function App() {
     });
   };
 
-  const handleClearUsers = () => {
-    fetch(`${API_URL}/clear`, {
-      method: 'POST'
+  const handleDeleteUser = (id) => {
+    fetch(`${API_URL}/delete/${id}`, {
+      method: 'DELETE'
     })
     .then(res => {
       if (res.ok) {
-        setUsers([]);
-        localStorage.removeItem('sorteo_users');
+        const updatedUsers = users.filter(u => u.id !== id);
+        setUsers(updatedUsers);
+        localStorage.setItem('sorteo_users', JSON.stringify(updatedUsers));
       }
     })
     .catch(err => {
-      console.error("Error al borrar en el servidor, borrando en local:", err);
-      setUsers([]);
-      localStorage.removeItem('sorteo_users');
+      console.error("Error al eliminar en el servidor, eliminando en local:", err);
+      const updatedUsers = users.filter(u => u.id !== id);
+      setUsers(updatedUsers);
+      localStorage.setItem('sorteo_users', JSON.stringify(updatedUsers));
     });
   };
 
@@ -181,9 +184,47 @@ export default function App() {
         {view === 'registration' ? (
           <RegistrationForm onAddUser={handleAddUser} users={users} />
         ) : (
-          <AdminPanel users={users} onClearUsers={handleClearUsers} />
+          <AdminPanel users={users} onDeleteUser={setParticipantToDelete} />
         )}
       </main>
+
+      {/* Custom Confirmation Modal */}
+      {participantToDelete && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <div className="modal-icon-warning">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+            <h3 className="modal-title">¿Eliminar participante?</h3>
+            <p className="modal-desc">
+              ¿Estás seguro de que deseas eliminar a <strong>{participantToDelete.nombre}</strong> (DNI: {participantToDelete.dni}) de los registros?
+            </p>
+            <div className="modal-actions">
+              <button 
+                type="button" 
+                className="btn-secondary" 
+                onClick={() => setParticipantToDelete(null)}
+              >
+                Cancelar
+              </button>
+              <button 
+                type="button" 
+                className="btn-danger" 
+                onClick={() => {
+                  handleDeleteUser(participantToDelete.id);
+                  setParticipantToDelete(null);
+                }}
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Confetti from './Confetti';
 
-export default function AdminPanel({ users, onClearUsers }) {
+export default function AdminPanel({ users, onDeleteUser }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
@@ -16,6 +16,11 @@ export default function AdminPanel({ users, onClearUsers }) {
   const [shuffleName, setShuffleName] = useState('');
   const [winners, setWinners] = useState([]);
   const [confettiActive, setConfettiActive] = useState(false);
+
+  // Sync winners when users change (e.g. if a user is deleted)
+  useEffect(() => {
+    setWinners(prev => prev.filter(w => users.some(u => u.id === w.id)));
+  }, [users]);
 
   // Clear shake effect after animation finishes
   useEffect(() => {
@@ -49,16 +54,7 @@ export default function AdminPanel({ users, onClearUsers }) {
     linkElement.click();
   };
 
-  const handleClearDatabase = () => {
-    const confirmClear = window.confirm(
-      '¿Estás absolutamente seguro de que deseas borrar TODOS los registros? Esta acción no se puede deshacer.'
-    );
-    if (confirmClear) {
-      onClearUsers();
-      setWinners([]);
-      setConfettiActive(false);
-    }
-  };
+
 
   // Filtered users for search
   const filteredUsers = users.filter(user => {
@@ -208,13 +204,6 @@ export default function AdminPanel({ users, onClearUsers }) {
                 </svg>
                 Exportar JSON
               </button>
-              <button onClick={handleClearDatabase} className="btn-danger" disabled={users.length === 0}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="3 6 5 6 21 6"></polyline>
-                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
-                Borrar Todo
-              </button>
             </div>
           </div>
 
@@ -229,6 +218,7 @@ export default function AdminPanel({ users, onClearUsers }) {
                     <th>Teléfono</th>
                     <th>Empresa</th>
                     <th>Fecha Registro</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -240,6 +230,22 @@ export default function AdminPanel({ users, onClearUsers }) {
                       <td>{user.telefono}</td>
                       <td>{user.empresa}</td>
                       <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>{user.fecha}</td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn-delete-row"
+                          onClick={() => onDeleteUser(user)}
+                          title="Eliminar participante"
+                          aria-label={`Eliminar a ${user.nombre}`}
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                          </svg>
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
